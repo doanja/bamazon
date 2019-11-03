@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 
-const promptInput = () => {
+const promptInput = con => {
   inquirer
     .prompt([
       /* Pass your questions in here */
@@ -12,6 +12,21 @@ const promptInput = () => {
       console.log('res.item_id :', res.item_id);
       console.log('res.quantity :', res.quantity);
       updateProduct(con, res.item_id, res.quantity);
+    });
+};
+
+const promptInputAgain = con => {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      { type: 'list', message: 'Do you want to order something else?', choices: ['Yes', 'No'], name: 'answer' }
+    ])
+    .then(res => {
+      if (res.answer === 'Yes') {
+        readProducts(con);
+      } else {
+        con.end();
+      }
     });
 };
 
@@ -37,7 +52,7 @@ const readProducts = con => {
     function(err, res, fields) {
       if (err) throw err;
       console.log(res);
-      promptInput();
+      promptInput(con);
     }
   );
 };
@@ -55,9 +70,19 @@ const getOrderTotal = (con, item_id, quantity) => {
     function(err, res, fields) {
       if (err) throw err;
       console.log('Order Summary:', res);
+      promptInputAgain(con);
     }
   );
 };
 
+const checkQuantity = (con, item_id) => {
+  con.query(`SELECT stock_quantity FROM products WHERE item_id = ${item_id}`, function(err, res, fields) {
+    if (err) throw err;
+    console.log(res);
+    return res;
+  });
+};
+
 const con = initDBConnection();
-readProducts(con);
+// readProducts(con);
+checkQuantity(con, 11);
