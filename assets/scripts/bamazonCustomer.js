@@ -65,9 +65,17 @@ const getOrderTotal = (con, item_id, quantity) => {
     function(err, res, fields) {
       if (err) throw err;
       console.log('Order Summary:', res);
+      updateProductSales(con, item_id, quantity);
       promptInputAgain(con);
     }
   );
+};
+
+const updateProductSales = (con, item_id, quantity) => {
+  con.query(`UPDATE products SET product_sales = product_sales + (price * ${quantity}) WHERE item_id=${item_id}`, function(err, res, fields) {
+    if (err) throw err;
+    return;
+  });
 };
 
 const con = initDBConnection();
