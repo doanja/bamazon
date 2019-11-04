@@ -1,33 +1,14 @@
 const inquirer = require('inquirer');
-const mysql = require('mysql');
-
-const initDBConnection = () => {
-  var con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'test',
-    database: 'bamazon'
-  });
-
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log('Connected!');
-  });
-
-  return con;
-};
+const initDBConnection = require('./connectDB');
 
 const promptInput = con => {
   inquirer
     .prompt([
-      /* Pass your questions in here */
       { type: 'input', message: 'Enter product ID you wish to buy?', name: 'item_id' },
       { type: 'input', message: 'Enter quanity you wish to buy?', name: 'quantity' }
     ])
     .then(res => {
-      console.log('res.item_id :', res.item_id);
-      console.log('res.quantity :', res.quantity);
-      // check stuff here
+      // check stock
       checkStockQuantity(con, res.item_id, parseInt(res.quantity));
     });
 };
@@ -48,14 +29,15 @@ const promptInputAgain = con => {
 };
 
 const readProducts = con => {
-  con.query(
-    `SELECT item_id AS 'Item ID', product_name AS 'Product', price AS 'Price per Item', stock_quantity AS 'Stock Quantity' FROM products`,
-    function(err, res, fields) {
-      if (err) throw err;
-      console.log(res);
-      promptInput(con);
-    }
-  );
+  con.query(`SELECT item_id, product_name, price, stock_quantity FROM products `, function(err, res, fields) {
+    if (err) throw err;
+    console.log('ID \t Price \t Quantity \t Product');
+    console.log('---------------------------------------------');
+    res.forEach(product => {
+      console.log(`${product.item_id} \t ${product.price} \t ${product.stock_quantity} \t\t ${product.product_name} `);
+    });
+    promptInput(con);
+  });
 };
 
 const checkStockQuantity = (con, item_id, reqQuantity) => {
