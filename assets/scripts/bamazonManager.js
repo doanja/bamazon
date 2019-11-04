@@ -12,10 +12,8 @@ const promptInput = con => {
       }
     ])
     .then(res => {
-      console.log('option picked:', res.option);
       switch (res.option) {
         case 'View Products for Sale':
-          console.log('View Products for Sale..');
           viewProductsForSale(con);
           break;
         case 'View Low Invetory':
