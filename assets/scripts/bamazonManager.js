@@ -25,8 +25,8 @@ const promptInput = con => {
           promptAddToInventory(con);
           break;
         case 'Add New Product':
-          console.log('not tested');
-        // prompt addnew product shit
+          promptAddNewProduct(con);
+          break;
       }
     });
 };
@@ -55,6 +55,20 @@ const promptAddToInventory = con => {
     ])
     .then(res => {
       checkItemID(con, res.item_id, parseInt(res.quantity));
+    });
+};
+
+const promptAddNewProduct = con => {
+  inquirer
+    .prompt([
+      /* Pass your questions in here */
+      { type: 'input', message: 'Enter product name', name: 'product' },
+      { type: 'input', message: 'Enter deparment', name: 'department' },
+      { type: 'input', message: 'Enter price', name: 'price' },
+      { type: 'input', message: 'Enter quanity', name: 'quantity' }
+    ])
+    .then(res => {
+      addNewProduct(con, res.product, res.department, parseInt(res.price), parseInt(res.quantity));
     });
 };
 
@@ -99,7 +113,7 @@ const checkItemID = (con, item_id, quanity) => {
     function(err, res, fields) {
       if (err) throw err;
       if (!res.length) {
-        console.log(`Item does not exists with ID ${item_id}`);
+        console.log(`NO PRODUCT WITH ID #${item_id} FOUND`);
         promptAddToInventory(con);
       } else {
         addToInventory(con, item_id, quanity);
@@ -110,12 +124,17 @@ const checkItemID = (con, item_id, quanity) => {
 
 const addNewProduct = (con, product, department, price, quantity) => {
   con.query(
-    `INSERT INTO products (product_name, department_name, price, stock_quantity)
-    VALUES (${product}, ${department}, ${price}, ${quantity});`,
+    'INSERT INTO products SET ?',
+    {
+      product_name: product,
+      department_name: department,
+      price: price,
+      stock_quantity: quantity
+    },
     function(err, res, fields) {
       if (err) throw err;
-      console.log('product added...');
-      //   viewProductsForSale(con);
+      console.log('PRODUCT ADDED');
+      viewProductsForSale(con);
     }
   );
 };
