@@ -1,13 +1,22 @@
 const inquirer = require('inquirer');
 const initDBConnection = require('./connectDB');
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptInput = con => {
   inquirer
     .prompt([
       {
         type: 'list',
         message: 'What do you want to do?',
-        choices: ['View Products for Sale', 'View Low Invetory', 'Add to Inventory', 'Add New Product'],
+        choices: [
+          'View Products for Sale',
+          'View Low Invetory',
+          'Add to Inventory',
+          'Add New Product'
+        ],
         name: 'option'
       }
     ])
@@ -29,11 +38,20 @@ const promptInput = con => {
     });
 };
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptInputAgain = con => {
   inquirer
     .prompt([
       /* Pass your questions in here */
-      { type: 'list', message: 'Do you want to do something else?', choices: ['Yes', 'No'], name: 'answer' }
+      {
+        type: 'list',
+        message: 'Do you want to do something else?',
+        choices: ['Yes', 'No'],
+        name: 'answer'
+      }
     ])
     .then(res => {
       if (res.answer === 'Yes') {
@@ -44,6 +62,10 @@ const promptInputAgain = con => {
     });
 };
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptAddToInventory = con => {
   inquirer
     .prompt([
@@ -56,6 +78,10 @@ const promptAddToInventory = con => {
     });
 };
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptAddNewProduct = con => {
   inquirer
     .prompt([
@@ -70,38 +96,72 @@ const promptAddNewProduct = con => {
     });
 };
 
+/**
+ * function to view products for sale
+ * @param {object} con the connection string
+ */
 const viewProductsForSale = con => {
-  con.query(`SELECT item_id, product_name, price, stock_quantity FROM products `, function(err, res, fields) {
+  con.query(`SELECT item_id, product_name, price, stock_quantity FROM products `, function(
+    err,
+    res,
+    fields
+  ) {
     if (err) throw err;
     console.log('ID \t Price \t Quantity \t Product');
     console.log('---------------------------------------------');
     res.forEach(product => {
-      console.log(`${product.item_id} \t ${product.price} \t ${product.stock_quantity} \t\t ${product.product_name} `);
+      console.log(
+        `${product.item_id} \t ${product.price} \t ${product.stock_quantity} \t\t ${product.product_name} `
+      );
     });
     promptInputAgain(con);
   });
 };
 
+/**
+ * function to view products that are low on quantity
+ * @param {object} con the connection string
+ */
 const viewLowInventory = con => {
-  con.query(`SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity < 6`, function(err, res, fields) {
-    if (err) throw err;
-    console.log('ID \t Price \t Quantity \t Product');
-    console.log('---------------------------------------------');
-    res.forEach(product => {
-      console.log(`${product.item_id} \t ${product.price} \t ${product.stock_quantity} \t\t ${product.product_name} `);
-    });
-    promptInputAgain(con);
-  });
+  con.query(
+    `SELECT item_id, product_name, price, stock_quantity FROM products WHERE stock_quantity < 6`,
+    function(err, res, fields) {
+      if (err) throw err;
+      console.log('ID \t Price \t Quantity \t Product');
+      console.log('---------------------------------------------');
+      res.forEach(product => {
+        console.log(
+          `${product.item_id} \t ${product.price} \t ${product.stock_quantity} \t\t ${product.product_name} `
+        );
+      });
+      promptInputAgain(con);
+    }
+  );
 };
 
+/**
+ * function to update the quantity of the product
+ * @param {object} con the connection string
+ * @param {number} item_id the ID of the item in the database
+ * @param {number} quantity the quantity of the item in the database
+ */
 const addToInventory = (con, item_id, quantity) => {
-  con.query(`UPDATE products SET stock_quantity = stock_quantity + ${quantity} WHERE item_id = ${item_id}`, function(err, res, fields) {
-    if (err) throw err;
-    console.log(`UPDATED PRODUCT ID #${item_id}. ADDED ${quantity} TO INVENTORY.\n`);
-    viewProductsForSale(con);
-  });
+  con.query(
+    `UPDATE products SET stock_quantity = stock_quantity + ${quantity} WHERE item_id = ${item_id}`,
+    function(err, res, fields) {
+      if (err) throw err;
+      console.log(`UPDATED PRODUCT ID #${item_id}. ADDED ${quantity} TO INVENTORY.\n`);
+      viewProductsForSale(con);
+    }
+  );
 };
 
+/**
+ * function to check if the ID exists in the database
+ * @param {object} con the connection string
+ * @param {number} item_id the ID of the item in the database
+ * @param {number} quantity the quantity of the item in the database
+ */
 const checkItemID = (con, item_id, quanity) => {
   console.log('check item id called');
   con.query(
@@ -120,6 +180,14 @@ const checkItemID = (con, item_id, quanity) => {
   );
 };
 
+/**
+ * function to create and add the product to the database
+ * @param {object} con the connection string
+ * @param {string} product the product name in the database
+ * @param {string} department the department in the database
+ * @param {number} price the price in the database
+ * @param {number} quantity the quantity in the database
+ */
 const addNewProduct = (con, product, department, price, quantity) => {
   con.query(
     'INSERT INTO products SET ?',

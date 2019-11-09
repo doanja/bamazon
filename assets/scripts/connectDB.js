@@ -1,5 +1,8 @@
 const mysql = require('mysql');
 
+/**
+ * function to establish connection with the SQL database
+ */
 const initDBConnection = () => {
   const con = mysql.createConnection({
     host: 'localhost',

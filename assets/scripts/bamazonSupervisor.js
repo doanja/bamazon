@@ -1,6 +1,10 @@
 const inquirer = require('inquirer');
 const initDBConnection = require('./connectDB');
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptInput = con => {
   inquirer
     .prompt([
@@ -23,6 +27,10 @@ const promptInput = con => {
     });
 };
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptInputAgain = con => {
   inquirer
     .prompt([
@@ -43,6 +51,10 @@ const promptInputAgain = con => {
     });
 };
 
+/**
+ * function to prompt user for input
+ * @param {object} con the connection string
+ */
 const promptDepartmentInput = con => {
   inquirer
     .prompt([
@@ -54,6 +66,10 @@ const promptDepartmentInput = con => {
     });
 };
 
+/**
+ * function to view product sales by department
+ * @param {object} con the connection string
+ */
 const viewProductSalesByDepartment = con => {
   con.query(
     `select 
@@ -81,6 +97,12 @@ const viewProductSalesByDepartment = con => {
   );
 };
 
+/**
+ * function to create and insert a new department into the database
+ * @param {object} con the connection string
+ * @param {string} department the department name of the department in the database
+ * @param {number} costs the costs of the department to be added to the database
+ */
 const createNewDepartment = (con, department, costs) => {
   con.query(
     'INSERT INTO departments SET ?',
