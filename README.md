@@ -27,15 +27,25 @@ Bamazon is a command line application that lets the user view information about 
 
 ## Example Output
 
-![GameStart](assets/images/GameStart.png?raw=true 'GameStart')
+```
+node bamazonCustomer
+```
 
-![CorrectGuess](assets/images/CorrectGuess.png?raw=true 'CorrectGuess')
+![bamazonCustomer](assets/images/bamazonCustomer.png?raw=true 'bamazonCustomer')
 
-![IncorrectGuess](assets/images/IncorrectGuess.png?raw=true 'IncorrectGuess')
+```
+node bamazonManager
+```
 
-![GameWin](assets/images/GameWin.png?raw=true 'GameWin')
+![bamazonManager1](assets/images/bamazonManager1.png?raw=true 'bamazonManager1')
 
-![GameOver](assets/images/GameOver.png?raw=true 'GameOver')
+![bamazonManager2](assets/images/bamazonManager2.png?raw=true 'bamazonManager2')
+
+```
+node bamazonSupervisor
+```
+
+![bamazonSupervisor](assets/images/bamazonSupervisor.png?raw=true 'bamazonSupervisor')
 
 ## Built With
 
