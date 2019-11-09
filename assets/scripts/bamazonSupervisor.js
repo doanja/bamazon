@@ -27,7 +27,12 @@ const promptInputAgain = con => {
   inquirer
     .prompt([
       /* Pass your questions in here */
-      { type: 'list', message: 'Do you want to do something else?', choices: ['Yes', 'No'], name: 'answer' }
+      {
+        type: 'list',
+        message: 'Do you want to do something else?',
+        choices: ['Yes', 'No'],
+        name: 'answer'
+      }
     ])
     .then(res => {
       if (res.answer === 'Yes') {
@@ -64,14 +69,18 @@ const viewProductSalesByDepartment = con => {
     group by dep.department_id`,
     function(err, res, fields) {
       if (err) throw err;
-      console.log('Department ID \t Department \t Over Head Costs \t Product Sales \t Total Profit');
-      console.log('----------------------------------------------------------------------------------------');
-      //   res.forEach(department => {
-      //     console.log(`${department} `);
-      //   });
-      console.log(res[0].over_head_costs);
-      //   console.log(res);
-      //   promptInput(con);
+      console.log(
+        'Department ID \t Department \t Over Head Costs \t Product Sales \t Total Profit'
+      );
+      console.log(
+        '----------------------------------------------------------------------------------------'
+      );
+      res.forEach(department => {
+        console.log(department);
+      });
+      // console.log(res[0].over_head_costs);
+      // //   console.log(res);
+      // //   promptInput(con);
       con.end();
     }
   );
@@ -93,5 +102,4 @@ const createNewDepartment = (con, department, costs) => {
 };
 
 const con = initDBConnection();
-// promptInput(con);
-viewProductSalesByDepartment(con);
+promptInput(con);
