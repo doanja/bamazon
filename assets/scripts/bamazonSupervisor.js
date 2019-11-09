@@ -55,8 +55,6 @@ const promptDepartmentInput = con => {
 };
 
 const viewProductSalesByDepartment = con => {
-  console.log('viewProductSalesByDepartment()');
-
   con.query(
     `select 
     dep.department_id as 'Department ID',
@@ -78,10 +76,7 @@ const viewProductSalesByDepartment = con => {
       res.forEach(department => {
         console.log(department);
       });
-      // console.log(res[0].over_head_costs);
-      // //   console.log(res);
-      // //   promptInput(con);
-      con.end();
+      promptInputAgain(con);
     }
   );
 };
