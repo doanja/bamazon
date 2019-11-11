@@ -10,9 +10,10 @@ Bamazon is a command line application that lets the user view information about 
    npm install
    ```
 3. Setup MySQL database locally
-4. Navigate to ./assets/scripts/connectDB.js and update the connection string
-5. Navigate to ./assets/scripts/ in the terminal
-6. Run
+4. Run the sql file localted in ~/assets/scripts/bamazon_schema.sql in SQL IDE
+5. Navigate to ~/assets/scripts/connectDB.js and update the connection string
+6. Navigate to ~/assets/scripts/ in the terminal
+7. Run
    ```
    node bamazonCustomer
    ```
